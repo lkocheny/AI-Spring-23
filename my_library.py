@@ -37,9 +37,9 @@ def naive_bayes(table, evidence_row, target):
   p_a = prior_prob(table, target, 1)
   pos = p_num * p_a
   #Use compute_probs to get 2 probabilities
-  prediction = compute_probs(neg,pos)
+  neg,pos = compute_probs(neg,pos)
   #return your 2 results in a list
-  return prediction
+  return [neg,pos]
 
 def test_it():
   return 'loaded'
