@@ -3,9 +3,9 @@ def compute_probs(neg,pos):
   p1 = pos/(neg+pos)
   return [p0,p1]
 
-def cond_prob(full_table, e, e_val, t, t_val):
-  t_subset = up_table_subset(full_table, t, 'equals', t_val)
-  e_list = up_get_column(t_subset, e)
+def cond_prob(full_table, e_col, e_val, t_col, t_val):
+  t_subset = up_table_subset(full_table, t_col, 'equals', t_val)
+  e_list = up_get_column(t_subset, e_col)
   p_b_a = sum([1 if v==e_val else 0 for v in e_list])/len(e_list)        
   return p_b_a
 
@@ -14,7 +14,7 @@ def cond_probs_product(table, e_val, t_col, t_val):
   for pair in evidence_complete:
     xi = pair[0]
     yi = pair[1]
-    cond_prob_list += [cond_prob(flu_table_2, xi, yi, target_column, target_val)]
+    cond_prob_list += [cond_prob(flu_table_2, xi, yi, t_col, t_val)]
   partial_numerator = up_product(cond_prob_list) 
   return partial_numerator
 
