@@ -11,10 +11,14 @@ def cond_prob(full_table, e_col, e_val, t_col, t_val):
 
 def cond_probs_product(table, e_val, t_col, t_val):
   cond_prob_list = []
+  table_columns = up_list_column_names(table)
+  evidence_columns = table_columns[:-1]
+  evidence_columns
+  evidence_complete = up_zip_lists(evidence_columns, e_val)
   for pair in evidence_complete:
     xi = pair[0]
     yi = pair[1]
-    cond_prob_list += [cond_prob(flu_table_2, xi, yi, t_col, t_val)]
+    cond_prob_list += [cond_prob(table, xi, yi, t_col, t_val)]
   partial_numerator = up_product(cond_prob_list) 
   return partial_numerator
 
