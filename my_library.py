@@ -23,7 +23,19 @@ def prior_prob(table, t_col, t_val):
   p_a = sum([1 if v==t_val else 0 for v in t_list])/len(t_list)
   return p_a
 
-
+def naive_bayes(table, evidence_row, target):
+  #compute P(Flu=0|...) by collecting cond_probs in a list, take the product of the list, finally multiply by P(Flu=0)
+  p_num = cond_probs_product(table, evidence_row, target, 0)
+  p_a = prior_prob(table, target, 0)
+  neg = p_num * p_a
+  #do same for P(Flu=1|...)
+  p_num = cond_probs_product(table, evidence_row, target, 1)
+  p_a = prior_prob(table, target, 1)
+  pos = p_num * p_a
+  #Use compute_probs to get 2 probabilities
+  prediction = compute_probs(neg,pos)
+  #return your 2 results in a list
+  return prediction
 
 def test_it():
   return 'loaded'
