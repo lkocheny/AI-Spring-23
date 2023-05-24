@@ -41,5 +41,23 @@ def naive_bayes(table, evidence_row, target):
   #return your 2 results in a list
   return [neg,pos]
 
+def metrics(inputlist):
+  assert isinstance(inputlist,list), f'Parameter must be a list'
+  for item in inputlist:
+    assert isinstance(item,list), f'Parameter must be a list of lists'
+    assert len(item) == 2, f'Parameter must be a zipped list'
+    for value in item:
+      assert isinstance(value, int), f'All values in the pair must be an integer'
+      assert value>=0, f'All values in the pair must be greater or equal to 0'
+  tn = sum([1 if pair==[0,0] else 0 for pair in inputlist])
+  tp = sum([1 if pair==[1,1] else 0 for pair in inputlist])
+  fp = sum([1 if pair==[1,0] else 0 for pair in inputlist])
+  fn = sum([1 if pair==[0,1] else 0 for pair in inputlist])
+  accuracy =  sum([p==a for p,a in inputlist])/len(inputlist)
+  precision = tp/(tp+fp) if tp+fp>0 else 0
+  recall = tp/(tp+fn) if tp+fn>0 else 0
+  f1 = 2*precision*recall/(precision+recall) if precision+recall>0 else 0
+  return {'Precision': {precision}, 'Recall': {recall}, 'F1': {f1}, 'Accuracy': {accuracy}}
+
 def test_it():
   return 'loaded'
