@@ -59,5 +59,47 @@ def metrics(inputlist):
   f1 = 2*precision*recall/(precision+recall) if precision+recall>0 else 0
   return {f'Precision': precision, 'Recall': recall, 'F1': f1, 'Accuracy': accuracy}
 
+from sklearn.ensemble import RandomForestClassifier  #make sure this makes it into your library
+
+def run_random_forest(train, test, target, n):
+  X = up_drop_column(train, target)
+  y = up_get_column(train, target)  
+  k_feature_table = up_drop_column(test, target) 
+  k_actuals = up_get_column(test, target)  
+  clf = RandomForestClassifier(n_estimators=n, max_depth=2, random_state=0)  
+  clf.fit(X, y)  #builds the trees as specified above
+  probs = clf.predict_proba(k_feature_table)
+  pos_probs = [p for n,p in probs]  #probs is list of [neg,pos] like we are used to seeing.
+  pos_probs[:5]
+  all_mets = []
+  for t in thresholds:
+    all_predictions = [1 if pos>t else 0 for pos in pos_probs]
+    pred_act_list = up_zip_lists(all_predictions, k_actuals)
+    mets = metrics(pred_act_list)
+    mets['Threshold'] = t
+    all_mets = all_mets + [mets]
+
+  all_mets[:2]
+  metrics_table = up_metrics_table(all_mets)
+  metrics_table
+
+  print(metrics_table)  #output we really want - to see the table
+  return None
+
+
+for arch in all_architectures:
+  all_results = up_neural_net(train_table, test_table, arch, target)
+  #loop through thresholds
+  all_mets = []
+  for t in thresholds:
+    all_predictions = [1 if pos>t else 0 for neg,pos in all_results]
+    pred_act_list = up_zip_lists(all_predictions, up_get_column(test_table, target))
+    mets = metrics(pred_act_list)
+    mets['Threshold'] = t
+    all_mets = all_mets + [mets]
+  print(f'Architecture: {arch}')
+  print(up_metrics_table(all_mets))
+
+  
 def test_it():
   return 'loaded'
