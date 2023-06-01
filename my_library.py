@@ -108,6 +108,32 @@ def try_archs(full_table, target, architectures, thresholds):
   return None
   
   
+  #function for converting a value from one range r1 (a pair of values) to range r2 (a pair of values)
+  def convert_range(value, r1, r2 ):
+    #should add asserts here but being lazy 
+    return (value - r1[0]) * (r2[1] - r2[0]) / (r1[1] - r1[0]) + r2[0]
+  
+  
+#%%capture
+#pip install vaderSentiment
+#from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+#analyzer = SentimentIntensityAnalyzer()  #gives us analyzer (a function) that accepts text and returns a sentiment
+
+def analyze_3_value_sentiment(sentence):
+  vs = analyzer.polarity_scores(sentence)  #{'neg': 0.0, 'neu': 0.254, 'pos': 0.746, 'compound': 0.8316}
+  del vs['compound']  #way to delete an item from a dictionary
+  max_key = max(vs, key=vs.get)  #way to get the key that goes with the maximum value in a dictionary
+  return [max_key, vs]
+
+def analyze_2_value_sentiment(text):
+  assert isinstance(text, str)
+  vs = analyzer.polarity_scores(text)  #e.g., {'neg': 0.0, 'neu': 0.254, 'pos': 0.746, 'compound': 0.8316}
+  compound = vs['compound']  #look up the key 'compound' in the dictionary vs and return its value
+  pos = convert_range(compound, [-1,1],[0,1])  #convert to value between 0 and 1
+  assert 0<=pos<=1
+  return pos
+  
+  
   
 def test_it():
   return 'loaded'
