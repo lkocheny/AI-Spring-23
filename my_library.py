@@ -47,7 +47,7 @@ def metrics(inputlist):
     assert isinstance(item,list), f'Parameter must be a list of lists'
     assert len(item) == 2, f'Parameter must be a zipped list'
     #for value in item:
-      #assert isinstance(value, int), f'All values in the pair must be an integer'
+      #assert isinstance(value, int), f'All values in the pair must be an integer'. ------> FIX PLEASE
       #assert value>=0, f'All values in the pair must be greater or equal to 0'
   tn = sum([1 if pair==[0,0] else 0 for pair in inputlist])
   tp = sum([1 if pair==[1,1] else 0 for pair in inputlist])
